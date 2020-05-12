@@ -134,7 +134,7 @@ for kEx = 1:numel(experiments)
         
         plot(bins, mean(sprate(goodTrials & stim.targchosen==1, :))); hold on
         plot(bins, mean(sprate(goodTrials & stim.targchosen==2, :)));
-        %xlim([-.1 1.3])
+        xlim([-.1 1.3])
         xlabel('Time from Motion Onset')
         if kNeuron==1
             ylabel('Spike Rate')

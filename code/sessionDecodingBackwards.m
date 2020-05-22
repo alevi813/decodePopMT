@@ -34,7 +34,7 @@ else
     
     if strcmp(model, 'choice')
         %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/rawRates/' condition{2}];
-        savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/residuals/' condition{2}];
+        %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/residuals/' condition{2}];
         savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/backwardsWindow/' condition{2}];
     else
         %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/rawRates/' condition{2}];
@@ -100,13 +100,18 @@ for kEx = 1:numel(experiments)
     %Rs = nan(stim.nTrials, nBins, nNeurons); %preallocate
     Rs = nan(sum(stim.goodtrial), nBins, nNeurons); %preallocate
     
+    % stimulus timing variables
+    motionOnset  = [stim.timing(:).motionon] + [stim.timing(:).plxstart];
+    motionOffset = [stim.timing(:).motionoff] + [stim.timing(:).plxstart];
+    goTime       = [stim.timing(:).fpoff] + [stim.timing(:).plxstart];
+
+    timeToGo = goTime - motionOffset;
+        
     % loop over neurons in the session
     for kNeuron = 1:nNeurons
         
         
-        spikeTimes  = neurons(kNeuron).spikeTimes;
-        motionOnset = [stim.timing(:).motionon] + [stim.timing(:).plxstart];
-        goTime      = [stim.timing(:).fpoff] + [stim.timing(:).plxstart];
+        spikeTimes   = neurons(kNeuron).spikeTimes;
         
         % get spike count aligned to motion onset
         %[spcnt, bins]  = pdsa.binSpTimes(spikeTimes, motionOnset, window, binSize);
@@ -154,9 +159,7 @@ for kEx = 1:numel(experiments)
         
         % pulse values
         pulses = sum(stim.pulses(goodTrials,:,:),3);
-        
-        
-        
+
         
         subplot(3,nNeurons,2*nNeurons + kNeuron)
         
@@ -191,7 +194,9 @@ for kEx = 1:numel(experiments)
     %% Now do population decoding approach
     
     % Rs is trialxbinsxneuron - sum across time bins, and then squeeze.
-    R = squeeze(sum(Rs_fromGo(:,bins_fromGo > -.6 & bins_fromGo < 0.1,:),2));
+    %R = squeeze(sum(Rs_fromGo(:,bins_fromGo > -.6 & bins_fromGo < 0.1,:),2));
+    R = squeeze(sum(Rs_fromGo(:,bins_fromGo > -.5 & bins_fromGo < 0,:),2));    
+    %R = squeeze(sum(Rs_fromGo,2));
     Cho = sign(stim.targchosen - 1.5);
     Direc = sign(sum(sum(stim.pulses, 3),2));
     
@@ -200,8 +205,7 @@ for kEx = 1:numel(experiments)
     R = R(goodTrials,:);
     Cho = Cho(goodTrials);
     Direc = Direc(goodTrials);
-%    spikes = Rs(goodTrials,:,:);
-    spikes = Rs;
+
     dirprob = stim.dirprob(goodTrials);
     
     if corr(Cho, Direc) < 0
@@ -209,10 +213,7 @@ for kEx = 1:numel(experiments)
     end
     
     froIx = stim.trialId==stim.frozenTrialIds;
-    froIx = froIx(goodTrials);
-    
-    % proportion of trials in test set
-    propVal = .2;
+    froIx = froIx(goodTrials);    
     
     % get weights
     % use GLM fit
@@ -222,16 +223,12 @@ for kEx = 1:numel(experiments)
         w2 = glmfit( R(froIx, :), Cho(froIx) );
         [sLoo] = xval_LOO( R(froIx, :), Cho(froIx) );
         
-        %[wTrain, wTest, trainIx, testIx] = crossv(R(froIx, :), Cho(froIx), propVal);
         
         %         % fit on choice, using *all revco* trials
         %         w2 = glmfit( R(dirprob==0, :), Cho(dirprob==0) );
-        %         [wTrain, wTest, trainIx, testIx] = crossv(R(dirprob==0, :), Cho(dirprob==0), propVal);
     else
         w2  = glmfit( R(~froIx, :), Direc(~froIx) ); % fit on direction (binary for now)
         [sLoo] = xval_LOO( R(~froIx, :), Direc(~froIx) );
-        
-        %[wTrain, wTest, trainIx, testIx] = crossv(R(~froIx, :), Direc(~froIx), propVal);
     end
     
     
@@ -341,20 +338,11 @@ for kEx = 1:numel(experiments)
     
     %% package and save
     
-    sessionStruct.dvAll     = dvAll;
-    %     sessionStruct.dvTrain   = dvTrain;
-    %     sessionStruct.dvTest     = dvTest;
-    
+    sessionStruct.dvAll      = dvAll;
     sessionStruct.bins       = bins;
     sessionStruct.bins_fromGo       = bins_fromGo;
-    sessionStruct.spikes     = spikes;
-    sessionStruct.newdvAll   = [dvAll(binaryCho==1,:); (dvAll(binaryCho==0,:) .*-1)];
-    %     sessionStruct.newdvTrain = [dvTrain(binaryCho==1,:); (dvTrain(binaryCho==0,:) .*-1)];
-    %     sessionStruct.newdvTest  = [dvTest(binaryCho==1,:); (dvTest(binaryCho==0,:) .*-1)];
-    %     sessionStruct.newdvAll   = [dvAll(binaryCho==1,:); (dvAll(binaryCho==0,:))];
-    %     sessionStruct.newdvTrain = [dvTrain(binaryCho==1,:); (dvTrain(binaryCho==0,:))];
-    %     sessionStruct.newdvTest  = [dvTest(binaryCho==1,:); (dvTest(binaryCho==0,:))];
-    
+    sessionStruct.spikes_fromGo     = spikes_fromGo;
+    sessionStruct.newdvAll          = [dvAll(binaryCho==1,:); (dvAll(binaryCho==0,:) .*-1)];
     %    sessionStruct.normdv    = mean(sessionStruct.newdv) / max(mean(sessionStruct.newdv));
     sessionStruct.cho       = binaryCho;
     sessionStruct.direction = Direc;
@@ -365,13 +353,9 @@ for kEx = 1:numel(experiments)
     sessionStruct.behavior  = S;
     sessionStruct.wAll      = wAll;
     sessionStruct.sLoo      = sLoo;
-    %     sessionStruct.wTrain    = wTrain;
-    %     sessionStruct.wTest     = wTest;
-    %     sessionStruct.trainIx   = trainIx;
-    %     sessionStruct.testIx   = testIx;
-    sessionStruct.flipDV   = flipDV;
-    sessionStruct.nNeurons = nNeurons;
-    
+    sessionStruct.flipDV    = flipDV;
+    sessionStruct.nNeurons  = nNeurons;
+    sessionStruct.timeToGo  = timeToGo;
     
     %     if strcmp(condition{2}, 'early')
     %         save([savePath(1:end-5) 'data' filesep 'allRevco' filesep exname], '-v7.3', '-struct', 'sessionStruct')

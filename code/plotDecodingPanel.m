@@ -47,7 +47,7 @@ set(gcf, 'color', 'w')
 
 figure(4)
 %subplot(234); hold on
-subplot(131); hold on
+subplot(231); hold on
 dS.early.dir.cpm  = smooth( mean(dS.early.dir.cpt), 10);
 dS.early.dir.cpse = smooth( (std(dS.early.dir.cpt) / sqrt(size(dS.early.cho.cpt, 1))), 9);
 boundedline(session.bins, dS.early.dir.cpm, dS.early.dir.cpse, 'cmap', [.8 0 0], 'alpha');
@@ -58,12 +58,12 @@ dS.early.cho.cpse = smooth( (std(dS.early.cho.cpt) / sqrt(size(dS.early.cho.cpt,
 boundedline(session.bins, dS.early.cho.cpm, dS.early.cho.cpse, 'cmap', [.3 0 0], 'alpha');
 %boundedline(session.bins_fromGo, dS.early.cho.cpm, dS.early.cho.cpse, 'cmap', [.3 0 0], 'alpha');
 
-xlim([-.5 1.4])
-ylim([0.46 .65])
+%xlim([-.5 1.4])
+%ylim([0.46 .65])
 axis square
 
 %subplot(235); hold on
-subplot(132); hold on
+subplot(232); hold on
 dS.flat.dir.cpm  = smooth( mean(dS.flat.dir.cpt), 10);
 dS.flat.dir.cpse = smooth( (std(dS.flat.dir.cpt) / sqrt(size(dS.flat.cho.cpt, 1))), 9);
 boundedline(session.bins, dS.flat.dir.cpm, dS.flat.dir.cpse, 'cmap', [0 0 .8], 'alpha');
@@ -74,12 +74,12 @@ dS.flat.cho.cpse = smooth( (std(dS.flat.cho.cpt) / sqrt(size(dS.flat.cho.cpt, 1)
 boundedline(session.bins, dS.flat.cho.cpm, dS.flat.cho.cpse, 'cmap', [0 0 .3], 'alpha');
 %boundedline(session.bins_fromGo, dS.flat.cho.cpm, dS.flat.cho.cpse, 'cmap', [0 0 .3], 'alpha');
 
-xlim([-.5 1.5])
-ylim([0.46 .65])
+%xlim([-.5 1.5])
+%ylim([0.46 .65])
 axis square
 
 %subplot(236); hold on
-subplot(133); hold on
+subplot(233); hold on
 dS.late.dir.cpm  = smooth( mean(dS.late.dir.cpt), 10);
 dS.late.dir.cpse = smooth( (std(dS.late.dir.cpt) / sqrt(size(dS.late.cho.cpt, 1))), 9);
 boundedline(session.bins, dS.late.dir.cpm, dS.late.dir.cpse, 'cmap', [.8 .8 0], 'alpha');
@@ -90,8 +90,8 @@ dS.late.cho.cpse = smooth( (std(dS.late.cho.cpt) / sqrt(size(dS.late.cho.cpt, 1)
 boundedline(session.bins, dS.late.cho.cpm, dS.late.cho.cpse, 'cmap', [.4 .4 0], 'alpha');
 %boundedline(session.bins_fromGo, dS.late.cho.cpm, dS.late.cho.cpse, 'cmap', [.4 .4 0], 'alpha');
 
-xlim([-.5 1.5])
-ylim([0.46 .65])
+%xlim([-.5 1.5])
+%ylim([0.46 .65])
 axis square
 
 %%%% for stats

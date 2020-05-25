@@ -35,8 +35,12 @@ else
 end
 
 if backwards
-     dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/backwardsWindow/data'];
-     figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'backwardsWindow/' condition];
+     %dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/backwardsWindow/data'];
+     %figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'backwardsWindow/' condition];
+     %dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/bw_oldWeights/data'];
+     %figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'bw_oldWeights/' condition];
+     dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/bw_fullWindow/data'];
+     figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'bw_fullWindow/' condition];
 end
 
 % combin the vars you want across sessions

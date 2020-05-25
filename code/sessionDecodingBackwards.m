@@ -1,5 +1,5 @@
 
-function [sessionStruct] = sessionDecodingBackwards(model, condition)
+function [sessionStruct] = sessionDecodingBackwards(model, condition, weightOrigin)
 % train a linear decoder on trial firing rates per neuron and the either
 % the choice or the direction on each trial. Get weights for each neuron,
 % reweight to get ensemble activity that best predicts the variable of your
@@ -15,6 +15,10 @@ function [sessionStruct] = sessionDecodingBackwards(model, condition)
 % input specific session too?
 
 %% get expts and set paths based on machine
+if nargin <3
+    weightOrigin = 'calculateW';
+end
+
 experiments = getExperimentsAnd(condition);
 
 comp = getComp;
@@ -32,14 +36,21 @@ else
     dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/Data/' condition{1}];
     nDataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/Data/' condition{1} '/neurons'];
     
-    if strcmp(model, 'choice')
-        %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/rawRates/' condition{2}];
-        %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/residuals/' condition{2}];
-        savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/backwardsWindow/' condition{2}];
-    else
-        %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/rawRates/' condition{2}];
-        %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/residuals/' condition{2}];
-        savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/backwardsWindow/' condition{2}];
+    switch weightOrigin
+        case 'calculateW'
+            if strcmp(model, 'choice')
+                %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/backwardsWindow/' condition{2}];
+                 savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/bw_fullWindow/' condition{2}];
+            else
+                %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/backwardsWindow/' condition{2}];
+                savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/bw_fullWindow/' condition{2}];
+            end
+        case 'loadW'
+            if strcmp(model, 'choice')
+                savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/bw_oldWeights/' condition{2}];
+            else
+                savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/bw_oldWeights/' condition{2}];
+            end
     end
 end
 
@@ -104,9 +115,9 @@ for kEx = 1:numel(experiments)
     motionOnset  = [stim.timing(:).motionon] + [stim.timing(:).plxstart];
     motionOffset = [stim.timing(:).motionoff] + [stim.timing(:).plxstart];
     goTime       = [stim.timing(:).fpoff] + [stim.timing(:).plxstart];
-
+    
     timeToGo = goTime - motionOffset;
-        
+    
     % loop over neurons in the session
     for kNeuron = 1:nNeurons
         
@@ -159,7 +170,7 @@ for kEx = 1:numel(experiments)
         
         % pulse values
         pulses = sum(stim.pulses(goodTrials,:,:),3);
-
+        
         
         subplot(3,nNeurons,2*nNeurons + kNeuron)
         
@@ -180,7 +191,7 @@ for kEx = 1:numel(experiments)
         
         residuals_fromGo = bsxfun(@minus, sprate_fromGo, nanmean(sprate_fromGo));
         Rs_fromGo(goodTrials, :, kNeuron) = residuals_fromGo(goodTrials,:);
-
+        
         spikes_fromGo = Rs_fromGo(goodTrials,:,:);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
@@ -194,9 +205,8 @@ for kEx = 1:numel(experiments)
     %% Now do population decoding approach
     
     % Rs is trialxbinsxneuron - sum across time bins, and then squeeze.
-    %R = squeeze(sum(Rs_fromGo(:,bins_fromGo > -.6 & bins_fromGo < 0.1,:),2));
-    R = squeeze(sum(Rs_fromGo(:,bins_fromGo > -.5 & bins_fromGo < 0,:),2));    
-    %R = squeeze(sum(Rs_fromGo,2));
+    %R = squeeze(sum(Rs_fromGo(:,bins_fromGo > -.5 & bins_fromGo < 0,:),2)); % summed spikes over 500ms pre "go"
+    R = squeeze(sum(Rs_fromGo,2)); % summed spikes based on entire window (1 second before "go" -- double check binsptimes window though)
     Cho = sign(stim.targchosen - 1.5);
     Direc = sign(sum(sum(stim.pulses, 3),2));
     
@@ -205,7 +215,7 @@ for kEx = 1:numel(experiments)
     R = R(goodTrials,:);
     Cho = Cho(goodTrials);
     Direc = Direc(goodTrials);
-
+    
     dirprob = stim.dirprob(goodTrials);
     
     if corr(Cho, Direc) < 0
@@ -213,39 +223,44 @@ for kEx = 1:numel(experiments)
     end
     
     froIx = stim.trialId==stim.frozenTrialIds;
-    froIx = froIx(goodTrials);    
+    froIx = froIx(goodTrials);
     
     % get weights
     % use GLM fit
-    if strcmp(model, 'choice')
-        % fit on choice, using *only frozen* trials
-        % xval via leave-one-out
-        w2 = glmfit( R(froIx, :), Cho(froIx) );
-        [sLoo] = xval_LOO( R(froIx, :), Cho(froIx) );
+    switch weightOrigin
+        case 'calculateW'
+            if strcmp(model, 'choice')
+                % fit on choice, using *only frozen* trials
+                % xval via leave-one-out
+                w2 = glmfit( R(froIx, :), Cho(froIx) );
+                [sLoo] = xval_LOO( R(froIx, :), Cho(froIx) );             
+                
+                %         % fit on choice, using *all revco* trials
+                %         w2 = glmfit( R(dirprob==0, :), Cho(dirprob==0) );
+            else
+                w2  = glmfit( R(~froIx, :), Direc(~froIx) ); % fit on direction (binary for now)
+                [sLoo] = xval_LOO( R(~froIx, :), Direc(~froIx) );
+                
+            end % if choice or dir
+            
+            wAll = w2(2:end);
+            %kAll = w2(1);
+        case 'loadW'
+            if strcmp(model, 'choice')
+                tmpStruct = load(['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/residuals/data/' exname '.mat']);
+            else
+                tmpStruct = load(['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/residuals/data/' exname '.mat']);
+            end % if choice or dir
+            
+            wAll = tmpStruct.wAll;
+            sLoo = tmpStruct.sLoo;
+    end % switch weightOrigin
         
-        
-        %         % fit on choice, using *all revco* trials
-        %         w2 = glmfit( R(dirprob==0, :), Cho(dirprob==0) );
-    else
-        w2  = glmfit( R(~froIx, :), Direc(~froIx) ); % fit on direction (binary for now)
-        [sLoo] = xval_LOO( R(~froIx, :), Direc(~froIx) );
-    end
-    
-    
-    if corr(R*w2(2:end), Cho) < 0
+    if corr(R*wAll, Cho) < 0
         flipDV = true;
     else
         flipDV = false;
-    end
-    
-    wAll = w2(2:end);
-    kAll = w2(1);
-    
-    %     kTrain = wTrain(1);
-    %     wTrain = wTrain(2:end);
-    %
-    %     kTest = wTest(1);
-    %     wTest = wTest(2:end);
+    end    
     
     allW{kEx} = wAll;
     
@@ -370,6 +385,7 @@ for kEx = 1:numel(experiments)
         save([savePath(1:end-4) 'data' filesep exname], '-v7.3', '-struct', 'sessionStruct')
     end
     
+    clearvars -except model condition weightOrigin savePath experiments comp nFiles nFilesNames nDataPath dataPath
 end % experiment loop
 
 

@@ -1,17 +1,19 @@
 %% compare test and train data samples to validate decoding
 
-model    = 'direction';
+model    = 'choice';
 useRevco = false;
 
 switch model
     case 'direction'
-        baseDir='/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/residuals/data';
+        %baseDir='/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/residuals/data';
+        baseDir='/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/backwardsWindow/data';
     case 'choice'
         switch useRevco
             case true
                 baseDir='/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/residuals/data/allRevco';
             case false
-                baseDir='/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/residuals/data';
+                %baseDir='/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/residuals/data';
+                baseDir='/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/backwardsWindow/data';
         end
 end
 

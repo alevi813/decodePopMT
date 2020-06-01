@@ -308,74 +308,79 @@ for kEx = 1:numel(experiments)
     binaryCho = Cho==1;
     
     if strcmp(model, 'choice')
-        [cp_m,cp_s] = choiceProbabilityCalculate(dvAll, binaryCho(froIx));
+        
     else
         [cp_m,cp_s] = choiceProbabilityCalculate(dvAll(froIx, :), binaryCho(froIx));
     end
-       
-    plotOn = false;
-    if plotOn
-        figure(2); clf
-        set(gcf, 'DefaultAxesColorOrder', lines)
-        subplot(2,3,1)
-        plot(bins_fromGo, mean(dvAll(Cho==1,:))); hold on
-        plot(bins_fromGo, mean(dvAll(Cho==-1,:)) .* -1 );
-        %    plot(bins, mean(dvAll(Cho==-1,:)));
-        
-        ylabel('DV')
-        xlabel('Time')
-        axis tight
-        %xlim([-.5 1.6])
-        title('Choice Sorted DV')
-        
-        subplot(2,3,2)
-        
-        % motionOn = repmat([1 zeros(1, numel(bins)-1)], size(dv,1),1);
-        % motionOn = find(motionOn(:));
-        % coh = sum(pulses,2);
-        % cho = Cho==1;
-        
-        
-        subplot(2,3,6)
-        plot(S.pk.mle(1:7), 'k-o'); hold on
-        plot(S.pk.mle(1:7)+S.pk.sd(1:7), '--k');
-        plot(S.pk.mle(1:7)-S.pk.sd(1:7), '--k');
-        axis tight
-        title('PPK')
-        set(gca, 'Xtick', [1:7])
-        
-        % % try plotting the population PTA effect
-        % plot(sum(pta)*20, 'b-o')
-        
-        % subplot(2,3,4)
-        % plot(pulse_dvR, 'b-o'); hold on
-        % plot(pulse_dvL, 'r-o'); hold on
-        
-        subplot(2,3,4)
-        plot(bins_fromGo, cp_m);
-        %xlim([-.5 1.5])
-        hold on
-        %plot([-.5 1.5], [.5 .5], 'r--')
-        title('CP')
-        ylabel('CP')
-        xlabel('Time')
-        
-        
-        if strcmp(model, 'choice')
-            supertitle(['Choice - ' condition], 12)
-        else
-            supertitle(['Direction - ' condition], 12)
-        end
-        %saveas(gcf, [savePath filesep exname '_popDV.pdf'])
-        
-    end %plotOn?
+    
+    %%% pulse info below is redundant?
+    % pulse values
+    %pulses = sum(stim.pulses(goodTrials,:,:),3);
+    % pulse times (in bins relative to spcnt column 1)
+    %pulseTimes = find(pdsa.binSpTimes(stim.timing(find(stim.goodtrial,1)).pulses - stim.timing(find(stim.goodtrial,1)).motionon, 0, window, binSize));
+    
+    
+    figure(2); clf
+    set(gcf, 'DefaultAxesColorOrder', lines)
+    subplot(2,3,1)
+    plot(bins_fromGo, mean(dvAll(Cho==1,:))); hold on
+    plot(bins_fromGo, mean(dvAll(Cho==-1,:)) .* -1 );
+    %    plot(bins, mean(dvAll(Cho==-1,:)));
+    
+    ylabel('DV')
+    xlabel('Time')
+    axis tight
+    %xlim([-.5 1.6])
+    title('Choice Sorted DV')
+    
+    subplot(2,3,2)
+    
+    % motionOn = repmat([1 zeros(1, numel(bins)-1)], size(dv,1),1);
+    % motionOn = find(motionOn(:));
+    % coh = sum(pulses,2);
+    % cho = Cho==1;
+    
+    
+    subplot(2,3,6)
+    plot(S.pk.mle(1:7), 'k-o'); hold on
+    plot(S.pk.mle(1:7)+S.pk.sd(1:7), '--k');
+    plot(S.pk.mle(1:7)-S.pk.sd(1:7), '--k');
+    axis tight
+    title('PPK')
+    set(gca, 'Xtick', [1:7])
+    
+    % % try plotting the population PTA effect
+    % plot(sum(pta)*20, 'b-o')
+    
+    % subplot(2,3,4)
+    % plot(pulse_dvR, 'b-o'); hold on
+    % plot(pulse_dvL, 'r-o'); hold on
+    
+    subplot(2,3,4)
+    plot(bins_fromGo, cp_m);
+    %xlim([-.5 1.5])
+    hold on
+    %plot([-.5 1.5], [.5 .5], 'r--')
+    title('CP')
+    ylabel('CP')
+    xlabel('Time')
+    
+    
+    if strcmp(model, 'choice')
+        supertitle(['Choice - ' condition], 12)
+    else
+        supertitle(['Direction - ' condition], 12)
+    end
+    %saveas(gcf, [savePath filesep exname '_popDV.pdf'])
+    
+    
     %% package and save
     
     sessionStruct.dvAll      = dvAll;
     sessionStruct.bins       = bins;
     sessionStruct.bins_fromGo       = bins_fromGo;
     sessionStruct.spikes_fromGo     = spikes_fromGo;
-    %sessionStruct.newdvAll          = [dvAll(binaryCho==1,:); (dvAll(binaryCho==0,:) .*-1)];
+    sessionStruct.newdvAll          = [dvAll(binaryCho==1,:); (dvAll(binaryCho==0,:) .*-1)];
     %    sessionStruct.normdv    = mean(sessionStruct.newdv) / max(mean(sessionStruct.newdv));
     sessionStruct.cho       = binaryCho;
     sessionStruct.direction = Direc;

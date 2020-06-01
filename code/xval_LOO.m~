@@ -37,6 +37,9 @@ for kFold = 1:nTrials
     xvalStruct(kFold).wTrain = tmpW(2:end);
     dvTrain = x* xvalStruct(kFold).wTrain;
     
+    % save the dv (reweighted spikes) of the left out trial
+    xvalStruct(kFold).leftOutTrial = [];
+    
     % make predictions from dv
     xvalStruct(kFold).predictTrain = dvTrain >0;
     

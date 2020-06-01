@@ -33,8 +33,8 @@ else
     %dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/residuals/data'];
     %figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'residuals/' condition];
     
-    dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/test_xval/data'];
-    figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'test_xval/' condition];
+    dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/residuals/data'];
+    figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'residuals/' condition];
 end
 
 if backwards
@@ -109,8 +109,8 @@ combo.bins = bins;
 combo.pta  = cat(3, combo.pta{:});
 combo.mPTA = mean(combo.pta, 3);
 
-% newdv       = [combo.dvAll(combo.cho==1,:); (combo.dvAll(combo.cho==0,:) .*-1)];
-% combo.newdv = newdv;
+newdv       = [combo.dvAll(combo.cho==1,:); (combo.dvAll(combo.cho==0,:) .*-1)];
+combo.newdv = newdv;
 
 %normdv = mean(newdv) / max(mean(newdv));
 

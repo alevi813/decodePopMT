@@ -1,5 +1,5 @@
 
-function [sessionStruct] = sessionDecoding(model, condition)
+function [sessionStruct] = xval_tests(model, condition)
 % train a linear decoder on trial firing rates per neuron and the either
 % the choice or the direction on each trial. Get weights for each neuron,
 % reweight to get ensemble activity that best predicts the variable of your
@@ -230,19 +230,54 @@ for kEx = 1:numel(experiments)
         
     allW{kEx} = wAll;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     % get a decision variable for each trial
+%     [nTrials, nBins, nNeurons] = size(spikes);
+%     
+%     dvAll   = nan(nTrials, nBins);
+% 
+%     for iT = 1:nBins
+%         R = squeeze(spikes(:,iT,:) );
+%         dvAll(:,iT)   = R*wAll ;
+% 
+%         if flipDV
+%             dvAll(:,iT)   = -dvAll(:,iT);
+%         end
+%     end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % get a decision variable for each trial
     [nTrials, nBins, nNeurons] = size(spikes);
     
-    dvAll   = nan(nTrials, nBins);
-
-    for iT = 1:nBins
-        R = squeeze(spikes(:,iT,:) );
-        dvAll(:,iT)   = R*wAll ;
-
-        if flipDV
-            dvAll(:,iT)   = -dvAll(:,iT);
-        end
-    end  
+    if strcmp(model, 'choice')
+        dvAll   = nan(sum(froIx), nBins);
+    else
+        dvAll   = nan(nTrials, nBins);
+   end
+     
+   % reweighted decision variable
+   if strcmp(model, 'choice')
+       froSpikes = spikes(froIx,:,:);
+       for iTrial = 1:sum(froIx)
+           R = squeeze(froSpikes(iTrial,:,:) ); %squeeze to get spikes per bin per neuron during a specific trial
+           %dvAll(iTrial,:)   = R*wAll; % muliply spike matrix (nBin x nNeuron) by weight vector (nNeurons x 1)
+           dvAll(iTrial,:)   = R* sLoo(iTrial).wTrain; % muliply spike matrix (nBin x nNeuron) by weight vector (nNeurons x 1)
+           
+           if flipDV
+               dvAll(iTrial,:)   = -dvAll(iTrial,:);
+           end
+       end% ntrials        
+   else
+       for iTrial = 1:nTrials
+           R = squeeze(spikes(iTrial,:,:) ); %squeeze to get spikes per bin per neuron during a specific trial
+           dvAll(iTrial,:)   = R*wAll; % muliply spike matrix (nBin x nNeuron) by weight vector (nNeurons x 1)
+           %dvAll(iTrial,:)   = R* sLoo(iTrial).wTrain; % muliply spike matrix (nBin x nNeuron) by weight vector (nNeurons x 1)
+           
+           if flipDV
+               dvAll(iTrial,:)   = -dvAll(iTrial,:);
+           end
+       end% ntrials       
+   end % choice v direction model
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
 
     % smooth the dv
     dvAll   = filter(ones(5,1)/5, 1, dvAll')';
@@ -252,81 +287,11 @@ for kEx = 1:numel(experiments)
     % still need to binarize
     binaryCho = Cho==1;
     
-    [cp_m,cp_s] = choiceProbabilityCalculate(dvAll(froIx, :), binaryCho(froIx));
-    
-    %%% pulse info below is redundant?
-    % pulse values
-    %pulses = sum(stim.pulses(goodTrials,:,:),3);
-    % pulse times (in bins relative to spcnt column 1)
-    %pulseTimes = find(pdsa.binSpTimes(stim.timing(find(stim.goodtrial,1)).pulses - stim.timing(find(stim.goodtrial,1)).motionon, 0, window, binSize));
-    
-    % calculate PTA using the dv
-%    nTimeLags = 30;
-    nTimeLags = 50;
-    pta = pulseSTA(pulses, dvAll, pulseTimes, nTimeLags);
-    ptaBins = bsxfun(@plus, (1:nTimeLags)', pulseTimes) * binSize;
-    
-    figure(2); clf
-    set(gcf, 'DefaultAxesColorOrder', lines)
-    subplot(2,3,1)
-    plot(bins, mean(dvAll(Cho==1,:))); hold on
-    plot(bins, mean(dvAll(Cho==-1,:)) .* -1 );
-%    plot(bins, mean(dvAll(Cho==-1,:)));
+    %[cp_m,cp_s] = choiceProbabilityCalculate(dvAll(froIx, :), binaryCho(froIx));
+    [cp_m,cp_s] = choiceProbabilityCalculate(dvAll, binaryCho(froIx));
 
-    ylabel('DV')
-    xlabel('Time')
-    axis tight
-    xlim([-.5 1.6])
-    title('Choice Sorted DV')
-    
-    subplot(2,3,2)
-    
-    % motionOn = repmat([1 zeros(1, numel(bins)-1)], size(dv,1),1);
-    % motionOn = find(motionOn(:));
-    % coh = sum(pulses,2);
-    % cho = Cho==1;
-    
-    set(gcf, 'DefaultAxesColorOrder', hot(12))
-    plot(ptaBins, pta, 'Linewidth', 2)
-    axis tight
-    title('PTA')
-    
-    subplot(2,3,6)
-    plot(S.pk.mle(1:7), 'k-o'); hold on
-    plot(S.pk.mle(1:7)+S.pk.sd(1:7), '--k');
-    plot(S.pk.mle(1:7)-S.pk.sd(1:7), '--k');
-    axis tight
-    title('PPK')
-    set(gca, 'Xtick', [1:7])
-    
-    % % try plotting the population PTA effect
-    % plot(sum(pta)*20, 'b-o')
-    
-    % subplot(2,3,4)
-    % plot(pulse_dvR, 'b-o'); hold on
-    % plot(pulse_dvL, 'r-o'); hold on
-    
-    subplot(2,3,4)
-    plot(bins, cp_m);
-    xlim([-.5 1.5])
-    hold on
-    plot([-.5 1.5], [.5 .5], 'r--')
-    title('CP')
-    ylabel('CP')
-    xlabel('Time')
-    
-    subplot(2,3,5)
-    plot(sum(pta), 'b-o')
-    title('PTA sum')
-    set(gca, 'Xtick', [1:7])
-    
-    if strcmp(model, 'choice')
-        supertitle(['Choice - ' condition], 12)
-    else
-        supertitle(['Direction - ' condition], 12)
-    end    
-    %saveas(gcf, [savePath filesep exname '_popDV.pdf'])
-        
+
+       
     
     %% package and save
     
@@ -336,14 +301,12 @@ for kEx = 1:numel(experiments)
 
     sessionStruct.bins       = bins;
     sessionStruct.spikes     = spikes;
-    sessionStruct.ptaBins    = ptaBins;
-    sessionStruct.newdvAll   = [dvAll(binaryCho==1,:); (dvAll(binaryCho==0,:) .*-1)];
+    %sessionStruct.newdvAll   = [dvAll(binaryCho==1,:); (dvAll(binaryCho==0,:) .*-1)];
     sessionStruct.cho       = binaryCho;
     sessionStruct.direction = Direc;
     sessionStruct.froIx     = froIx;
     sessionStruct.cp_m      = cp_m;
     sessionStruct.cp_s      = cp_s;
-    sessionStruct.pta       = pta;
     sessionStruct.stim      = stim;
     sessionStruct.behavior  = S;
     sessionStruct.wAll      = wAll;

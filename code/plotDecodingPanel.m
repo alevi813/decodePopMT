@@ -45,7 +45,7 @@ set(gcf, 'color', 'w')
 %% cpt
 %figure
 
-figure(4)
+figure
 %subplot(234); hold on
 subplot(231); hold on
 dS.early.dir.cpm  = smooth( mean(dS.early.dir.cpt), 10);

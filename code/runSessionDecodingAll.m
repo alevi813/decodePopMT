@@ -1,7 +1,7 @@
 % %% direction
 % 
-% sessionDecoding('direction', {'nancy', 'flat'});
-% sessionDecoding('direction', {'leo', 'flat'});
+sessionDecoding('direction', {'nancy', 'flat'});
+sessionDecoding('direction', {'leo', 'flat'});
 % 
 % sessionDecoding('direction', {'nancy', 'late'});
 % sessionDecoding('direction', {'leo', 'late'});
@@ -11,8 +11,8 @@
 % 
 % %% choice
 % 
-% sessionDecoding('choice', {'nancy', 'flat'});
-% sessionDecoding('choice', {'leo', 'flat'});
+sessionDecoding('choice', {'nancy', 'flat'});
+sessionDecoding('choice', {'leo', 'flat'});
 % 
 % sessionDecoding('choice', {'nancy', 'late'});
 % sessionDecoding('choice', {'leo', 'late'});

@@ -64,7 +64,7 @@ axis square
 %%
 dw1 = nonstim.flat.dir.w( nonstim.flat.dir.w  > -3e-3 & nonstim.flat.dir.w  < 3e-3 );
 dw2 = stim.flat.dir.w( nonstim.flat.dir.w  > -3e-3 & nonstim.flat.dir.w  < 3e-3 );
-[flat.dir.r, flat.dir.p] = corrcoef(dw1,  dw2);
+[flat.dir.r, flat.dir.p] = corrcoef(dw1,  dw2)
 
 cw1 = nonstim.late.cho.slooW( nonstim.late.cho.slooW  > -0.01 & nonstim.late.cho.slooW  < 0.01 );
 cw2 = stim.late.cho.slooW( nonstim.late.cho.slooW  > -0.01 & nonstim.late.cho.slooW  < 0.01 );

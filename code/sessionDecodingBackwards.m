@@ -39,10 +39,11 @@ else
     switch weightOrigin
         case 'calculateW'
             if strcmp(model, 'choice')
-                savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/backwardsWindow/' condition{2}];
+                savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/xval_rawRates/' condition{2}];
+                %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/backwardsWindow/' condition{2}];
                 %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/bw_fullWindow/' condition{2}];
             else
-                savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/choice/backwardsWindow/' condition{2}];
+                savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/backwardsWindow/' condition{2}];
                 %savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/direction/bw_fullWindow/' condition{2}];
             end
         case 'loadW'
@@ -189,10 +190,14 @@ for kEx = 1:numel(experiments)
         
         sprate_fromGo = spcnt_fromGo/binSize;
         
-        residuals_fromGo = bsxfun(@minus, sprate_fromGo, nanmean(sprate_fromGo));
-        Rs_fromGo(goodTrials, :, kNeuron) = residuals_fromGo(goodTrials,:);
-        
-        spikes_fromGo = Rs_fromGo(goodTrials,:,:);
+%         % residuals
+%         residuals_fromGo                  = bsxfun(@minus, sprate_fromGo, nanmean(sprate_fromGo));
+%         Rs_fromGo(goodTrials, :, kNeuron) = residuals_fromGo(goodTrials,:);
+%         spikes_fromGo                     = Rs_fromGo(goodTrials,:,:);
+
+        % using raw rates, not residuals
+        Rs_fromGo(goodTrials, :, kNeuron) = sprate_fromGo(goodTrials,:);
+        spikes_fromGo                     = Rs_fromGo(goodTrials,:,:);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
     end % neuron loop

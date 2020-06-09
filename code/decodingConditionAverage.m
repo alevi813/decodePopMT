@@ -1,6 +1,6 @@
-function combo = decodingConditionAverage(model, condition, backwards)
+function combo = decodingConditionAverage(model, condition, fitWindow, plotWindow, backwards)
 % decodingConditionAverage
-% INPUTS: 
+% INPUTS:
 % - model --- 'choice' or 'direction'
 % - condition --- can be {2x1} with {'monkey', 'condition'} or {1x1} with
 % just condition for both monkeys
@@ -8,7 +8,7 @@ function combo = decodingConditionAverage(model, condition, backwards)
 % - combo --- struct with aggregate vars concatenated from various
 % individual session decoding files.
 
-if nargin <3
+if nargin <5
     backwards = false;
 end
 
@@ -21,29 +21,32 @@ if strcmp(comp, 'desktop')
         dataPath  = ['/Users/Aaron/Dropbox/twagAnalysis4.1/decoding/' model '/data'];
         %dataPath  = ['/Users/Aaron/Dropbox/twagAnalysis4.1/decoding/' model '/data/rawRates'];
     else
-%        dataPath  = ['/Users/Aaron/Dropbox/twagAnalysis4.1/decoding/' model '/data/allRevco'];
-%        dataPath  = ['/Users/Aaron/Dropbox/twagAnalysis4.1/decoding/' model '/data/rawRates'];
+        %        dataPath  = ['/Users/Aaron/Dropbox/twagAnalysis4.1/decoding/' model '/data/allRevco'];
+        %        dataPath  = ['/Users/Aaron/Dropbox/twagAnalysis4.1/decoding/' model '/data/rawRates'];
         dataPath  = ['/Users/Aaron/Dropbox/twagAnalysis4.1/decoding/' model '/data'];
     end
     figPath   = ['/Users/Aaron/Dropbox/twagAnalysis4.1/decoding/' model filesep condition];
 else
-%     dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/rawRates/data'];
-%     figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'rawRates/' condition];
+    %     dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/rawRates/data'];
+    %     figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'rawRates/' condition];
     
-    %dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/residuals/data'];
-    %figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'residuals/' condition];
+    %    dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/residuals/data'];
+    %    figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'residuals/' condition];
     
-    dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/test_xval/data'];
-    figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'test_xval/' condition];
+    %     dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/xval_rawRates/data'];
+    %     figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'test_xval/' condition];
+    %dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/' model '/stimulusFit_stimulusPlot'];
+    dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
 end
 
 if backwards
-     dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/backwardsWindow/data'];
-     figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'backwardsWindow/' condition];
-     %dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/bw_oldWeights/data'];
-     %figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'bw_oldWeights/' condition];
-     % dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/bw_fullWindow/data'];
-     % figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'bw_fullWindow/' condition];
+    dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/backwardsWindow/data'];
+    figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'backwardsWindow/' condition];
+    %dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/bw_oldWeights/data'];
+    %figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'bw_oldWeights/' condition];
+    % dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/bw_fullWindow/data'];
+    % figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'bw_fullWindow/' condition];
+    dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/xval_rawRates/data'];
 end
 
 % combin the vars you want across sessions
@@ -62,6 +65,7 @@ combo.sumcoh  = [];
 combo.targRchosen = [];
 combo.nNeurons = [];
 combo.w = [];
+combo.slooW = [];
 combo.timeToGo = [];
 
 for iExp = 1:length(experiments)
@@ -79,27 +83,31 @@ for iExp = 1:length(experiments)
         end
         
         if ~backwards
-            tmpSpikes      = mean(session.spikes, 3);        
+            tmpSpikes      = mean(session.spikes, 3);
             combo.spikes   = [combo.spikes; tmpSpikes];
             bins  = session.bins;
-
+            
         else
             combo.timeToGo   = [combo.timeToGo, session.timeToGo];
             bins = session.bins_fromGo;
         end
         
+        slooWeights = cell2mat(arrayfun(@(x) x.wTrain , session.sLoo, 'UniformOutput', false));
+        slooWeights = mean(slooWeights, 2);
+        
         combo.sumcoh   = [combo.sumcoh; sumCoh];
         combo.froIx    = [combo.froIx; session.froIx];
         combo.cho      = [combo.cho; session.cho];
         combo.dvAll    = [combo.dvAll; session.dvAll];
-%        combo.dvTrain  = [combo.dvTrain; session.dvTrain];
-%        combo.dvTest   = [combo.dvTest; session.dvTest];
+        %        combo.dvTrain  = [combo.dvTrain; session.dvTrain];
+        %        combo.dvTest   = [combo.dvTest; session.dvTest];
         %combo.pta      = [combo.pta; session.pta];
         combo.ppk      = [combo.ppk; (session.behavior.pk.mle(1:7) ./ norm(session.behavior.pk.mle(1:7)))'];
         combo.cpt      = [combo.cpt; session.cp_m'];
         combo.dir      = [combo.dir; session.direction];
         combo.nNeurons = [combo.nNeurons; session.nNeurons];
         combo.w        = [combo.w; session.wAll];
+        combo.slooW    = [combo.slooW; slooWeights];
     end
     
     clear session

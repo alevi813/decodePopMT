@@ -44,6 +44,7 @@ set(gcf, 'color', 'w')
 
 %% cpt
 %figure
+session.bins = dS.flat.cho.bins;
 
 figure
 %subplot(234); hold on
@@ -58,8 +59,8 @@ dS.early.cho.cpse = smooth( (std(dS.early.cho.cpt) / sqrt(size(dS.early.cho.cpt,
 boundedline(session.bins, dS.early.cho.cpm, dS.early.cho.cpse, 'cmap', [.3 0 0], 'alpha');
 %boundedline(session.bins_fromGo, dS.early.cho.cpm, dS.early.cho.cpse, 'cmap', [.3 0 0], 'alpha');
 
-%xlim([-.5 1.4])
-%ylim([0.46 .65])
+%xlim([-.5 1.5])
+%ylim([0.46 .64])
 axis square
 
 %subplot(235); hold on
@@ -73,9 +74,9 @@ dS.flat.cho.cpm  = smooth( mean(dS.flat.cho.cpt), 10);
 dS.flat.cho.cpse = smooth( (std(dS.flat.cho.cpt) / sqrt(size(dS.flat.cho.cpt, 1))), 9);
 boundedline(session.bins, dS.flat.cho.cpm, dS.flat.cho.cpse, 'cmap', [0 0 .3], 'alpha');
 %boundedline(session.bins_fromGo, dS.flat.cho.cpm, dS.flat.cho.cpse, 'cmap', [0 0 .3], 'alpha');
-
+% 
 %xlim([-.5 1.5])
-%ylim([0.46 .65])
+%ylim([0.46 .64])
 axis square
 
 %subplot(236); hold on
@@ -89,23 +90,23 @@ dS.late.cho.cpm  = smooth( mean(dS.late.cho.cpt), 10);
 dS.late.cho.cpse = smooth( (std(dS.late.cho.cpt) / sqrt(size(dS.late.cho.cpt, 1))), 9);
 boundedline(session.bins, dS.late.cho.cpm, dS.late.cho.cpse, 'cmap', [.4 .4 0], 'alpha');
 %boundedline(session.bins_fromGo, dS.late.cho.cpm, dS.late.cho.cpse, 'cmap', [.4 .4 0], 'alpha');
-
+% 
 %xlim([-.5 1.5])
-%ylim([0.46 .65])
+%ylim([0.46 .64])
 axis square
 
-%%%% for stats
-dirall    = [dS.flat.dir.cpt; dS.late.dir.cpt; dS.early.dir.cpt];
-dirallm   = smooth( mean(dirall), 10);
-dirGrandM = mean(dirallm(50:170));
-dirse = smooth( (std([dS.late.dir.cpt; dS.flat.dir.cpt; dS.early.dir.cpt]) / sqrt(size([dS.late.dir.cpt; dS.flat.dir.cpt; dS.early.dir.cpt], 1))), 9);
-dirci = mean(dirse)*1.96;
-
-choall    = [dS.flat.cho.cpt; dS.late.cho.cpt; dS.early.cho.cpt];
-choallm   = smooth( mean(choall), 10);
-choGrandM = mean(choallm(50:170));
-chose = smooth( (std([dS.late.cho.cpt; dS.flat.cho.cpt; dS.early.cho.cpt]) / sqrt(size([dS.late.cho.cpt; dS.flat.cho.cpt; dS.early.cho.cpt], 1))), 9);
-choci = mean(chose)*1.96;
+% %%%% for stats
+% dirall    = [dS.flat.dir.cpt; dS.late.dir.cpt; dS.early.dir.cpt];
+% dirallm   = smooth( mean(dirall), 10);
+% dirGrandM = mean(dirallm(50:170));
+% dirse = smooth( (std([dS.late.dir.cpt; dS.flat.dir.cpt; dS.early.dir.cpt]) / sqrt(size([dS.late.dir.cpt; dS.flat.dir.cpt; dS.early.dir.cpt], 1))), 9);
+% dirci = mean(dirse)*1.96;
+% 
+% choall    = [dS.flat.cho.cpt; dS.late.cho.cpt; dS.early.cho.cpt];
+% choallm   = smooth( mean(choall), 10);
+% choGrandM = mean(choallm(50:170));
+% chose = smooth( (std([dS.late.cho.cpt; dS.flat.cho.cpt; dS.early.cho.cpt]) / sqrt(size([dS.late.cho.cpt; dS.flat.cho.cpt; dS.early.cho.cpt], 1))), 9);
+% choci = mean(chose)*1.96;
 %% alignment / similarity
 
 % figure(1)

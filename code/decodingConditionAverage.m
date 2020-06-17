@@ -1,4 +1,4 @@
-function combo = decodingConditionAverage(model, condition, fitWindow, plotWindow, backwards)
+function combo = decodingConditionAverage(model, condition, fitWindow, plotWindow)
 % decodingConditionAverage
 % INPUTS:
 % - model --- 'choice' or 'direction'
@@ -8,9 +8,6 @@ function combo = decodingConditionAverage(model, condition, fitWindow, plotWindo
 % - combo --- struct with aggregate vars concatenated from various
 % individual session decoding files.
 
-if nargin <5
-    backwards = false;
-end
 
 experiments = getExperimentsAnd(condition);
 
@@ -30,24 +27,18 @@ else
     %     dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/rawRates/data'];
     %     figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'rawRates/' condition];
     
-    %    dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/residuals/data'];
-    %    figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'residuals/' condition];
+%        dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/residuals/data'];
+%        figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'residuals/' condition];
     
     %     dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/xval_rawRates/data'];
     %     figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'test_xval/' condition];
-    %dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/' model '/stimulusFit_stimulusPlot'];
-    dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
+    
+    
+    %dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/no_xval/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
+    dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/xvalMean/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
+    %dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
 end
 
-if backwards
-    dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/backwardsWindow/data'];
-    figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'backwardsWindow/' condition];
-    %dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/bw_oldWeights/data'];
-    %figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'bw_oldWeights/' condition];
-    % dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/bw_fullWindow/data'];
-    % figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'bw_fullWindow/' condition];
-    dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/xval_rawRates/data'];
-end
 
 % combin the vars you want across sessions
 combo.dvAll   = [];
@@ -82,15 +73,9 @@ for iExp = 1:length(experiments)
             combo.dirprob = [combo.dirprob; session.stim.dirprob(session.stim.goodtrial)];
         end
         
-        if ~backwards
-            tmpSpikes      = mean(session.spikes, 3);
-            combo.spikes   = [combo.spikes; tmpSpikes];
-            bins  = session.bins;
-            
-        else
-            combo.timeToGo   = [combo.timeToGo, session.timeToGo];
-            bins = session.bins_fromGo;
-        end
+        tmpSpikes      = mean(session.spikes, 3);
+        combo.spikes   = [combo.spikes; tmpSpikes];
+        bins  = session.bins;
         
         slooWeights = cell2mat(arrayfun(@(x) x.wTrain , session.sLoo, 'UniformOutput', false));
         slooWeights = mean(slooWeights, 2);

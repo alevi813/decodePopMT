@@ -24,16 +24,16 @@ end
 dS = getDecodingData('all', 'nonstimulus', 'stimulus');
 %%
 
-% plot(dS.flat.dir.w,  dS.flat.cho.slooW, 'o', 'color', [0 0 .6])
-% flat_r = corrcoef(dS.flat.dir.w,  dS.flat.cho.slooW); hold on
-% 
-% plot(dS.late.dir.w,  dS.late.cho.slooW, 'o', 'color', [.6 .6 0])
-% late_r = corrcoef(dS.late.dir.w,  dS.late.cho.slooW);
-% 
-% plot(dS.early.dir.w,  dS.early.cho.slooW, 'o', 'color', [.6 0 0])
-% early_r = corrcoef(dS.early.dir.w,  dS.early.cho.slooW);
-% 
-% axis square
+plot(dS.flat.dir.w,  dS.flat.cho.slooW, 'o', 'color', [0 0 .6])
+flat_r = corrcoef(dS.flat.dir.w,  dS.flat.cho.slooW); hold on
+
+plot(dS.late.dir.w,  dS.late.cho.slooW, 'o', 'color', [.6 .6 0])
+late_r = corrcoef(dS.late.dir.w,  dS.late.cho.slooW);
+
+plot(dS.early.dir.w,  dS.early.cho.slooW, 'o', 'color', [.6 0 0])
+early_r = corrcoef(dS.early.dir.w,  dS.early.cho.slooW);
+
+axis square
 
 %%
 subplot(121)

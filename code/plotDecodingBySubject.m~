@@ -1,21 +1,21 @@
 % plot decoding by subject
 
-leo.flat.dir  = decodingConditionAverage('direction', {'leo', 'flat'}, 'stimulus', 'stimulus');
-leo.late.dir  = decodingConditionAverage('direction', {'leo', 'late'},'stimulus', 'stimulus');
-leo.early.dir = decodingConditionAverage('direction', {'leo', 'early'},'stimulus', 'stimulus');
+leo.flat.dir  = decodingConditionAverage('direction', {'leo', 'flat'}, 'nonstimulus', 'nonstimulus');
+leo.late.dir  = decodingConditionAverage('direction', {'leo', 'late'},'nonstimulus', 'nonstimulus');
+leo.early.dir = decodingConditionAverage('direction', {'leo', 'early'},'nonstimulus', 'nonstimulus');
 
-leo.flat.cho = decodingConditionAverage('choice', {'leo', 'flat'}, 'stimulus', 'stimulus');
-leo.late.cho = decodingConditionAverage('choice', {'leo', 'late'}, 'stimulus', 'stimulus');
-leo.early.cho = decodingConditionAverage('choice', {'leo', 'early'}, 'stimulus', 'stimulus');
+leo.flat.cho = decodingConditionAverage('choice', {'leo', 'flat'}, 'nonstimulus', 'nonstimulus');
+leo.late.cho = decodingConditionAverage('choice', {'leo', 'late'}, 'nonstimulus', 'nonstimulus');
+leo.early.cho = decodingConditionAverage('choice', {'leo', 'early'}, 'nonstimulus', 'nonstimulus');
 
 
-nancy.flat.dir  = decodingConditionAverage('direction', {'nancy', 'flat'}, 'stimulus', 'stimulus');
-nancy.late.dir  = decodingConditionAverage('direction', {'nancy', 'late'}, 'stimulus', 'stimulus');
-nancy.early.dir = decodingConditionAverage('direction', {'nancy', 'early'}, 'stimulus', 'stimulus');
+nancy.flat.dir  = decodingConditionAverage('direction', {'nancy', 'flat'}, 'nonstimulus', 'nonstimulus');
+nancy.late.dir  = decodingConditionAverage('direction', {'nancy', 'late'}, 'nonstimulus', 'nonstimulus');
+nancy.early.dir = decodingConditionAverage('direction', {'nancy', 'early'}, 'nonstimulus', 'nonstimulus');
 
-nancy.flat.cho = decodingConditionAverage('choice', {'nancy', 'flat'}, 'stimulus', 'stimulus');
-nancy.late.cho = decodingConditionAverage('choice', {'nancy', 'late'}, 'stimulus', 'stimulus');
-nancy.early.cho = decodingConditionAverage('choice', {'nancy', 'early'}, 'stimulus', 'stimulus');
+nancy.flat.cho = decodingConditionAverage('choice', {'nancy', 'flat'}, 'nonstimulus', 'nonstimulus');
+nancy.late.cho = decodingConditionAverage('choice', {'nancy', 'late'}, 'nonstimulus', 'nonstimulus');
+nancy.early.cho = decodingConditionAverage('choice', {'nancy', 'early'}, 'nonstimulus', 'nonstimulus');
 
 %%
 % cpt

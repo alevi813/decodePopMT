@@ -3,7 +3,9 @@
 comp   = getComp;
 doPlot = false;
 
-model       = 'choice';
+model       = 'direction';
+fitWindow   = 'stimulus';
+plotWindow  = 'stimulus';
 condition   = {'flat', 'early', 'late'};
 %subject     = 'leo';
 
@@ -13,7 +15,8 @@ for iCond = 1:length(condition)
     %experiments = getExperimentsAnd( {subject, condition{iCond}} );
     
     if strcmp(comp, 'laptop')
-        dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/rawRates/data'];
+%        dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model '/rawRates/data'];
+        dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
         figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep condition{iCond}];
     else
         dataPath  = ['/Users/Aaron/Dropbox/twagAnalysis4.1/decoding/' model '/data'];
@@ -38,17 +41,17 @@ for iCond = 1:length(condition)
             
             cohbins = binCoherences(sumcoh, nBins); % bin cohs for later
             
-            % rename weight vectors
-            trainData = session.wTrain;
-            testData = session.wTest;
-            
-            % get pearson's r on two sets of weights
-            if length(trainData) > 1
-                tmpr = corrcoef(trainData, testData);
-                rval(iExp) = tmpr(1,2);
-            else
-                rval(iExp) = NaN;
-            end
+%             % rename weight vectors
+%             trainData = session.wTrain;
+%             testData = session.wTest;
+%             
+%             % get pearson's r on two sets of weights
+%             if length(trainData) > 1
+%                 tmpr = corrcoef(trainData, testData);
+%                 rval(iExp) = tmpr(1,2);
+%             else
+%                 rval(iExp) = NaN;
+%             end
             
             % Calculate prediction accuracy for choice or direction using ROC. For
             % direction, calculate a full neurometric function and get the
@@ -157,7 +160,7 @@ for iCond = 1:length(condition)
 end %iCond
 %%
 if doPlot
-    
+    figure
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     subplot(232); hold on
     % flat /// direction

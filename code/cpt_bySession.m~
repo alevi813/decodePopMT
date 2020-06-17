@@ -1,0 +1,33 @@
+
+function cpt_bySession(model, condition, fitWindow, plotWindow)
+
+xvalPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
+allPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/no_xval/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
+%%
+experiments = getExperimentsAnd({condition});
+
+for iExp = 1:length(experiments)
+    
+   xval_session = load([xvalPath filesep experiments{iExp} '.mat']);
+   all_session = load([allPath filesep experiments{iExp} '.mat']); 
+
+   figure(1)
+   subplot(2,12,iExp)
+   plot(xval_session.bins, smooth(xval_session.cp_m, 10)); hold on
+   plot(all_session.bins, smooth(all_session.cp_m, 10));
+   xlim([-.5 1.5])
+   ylabel('CP')
+   title(experiments{iExp})
+   
+   figure(2)
+   subplot(2,12,iExp)
+   imagesc(cell2mat(arrayfun(@(x) x.wTrain , xval_session.sLoo, 'UniformOutput', false))); hold on
+   title(experiments{iExp})
+   
+   figure(3)
+   subplot(2,12,iExp)
+   %histogram(cell2mat(arrayfun(@(x) x.wTrain , xval_session.sLoo, 'UniformOutput', false))); hold on
+   plot(mean(cell2mat(arrayfun(@(x) x.wTrain , xval_session.sLoo, 'UniformOutput', false)), 2), '*');
+   plot(all_session.wAll, 'o');
+   title(experiments{iExp})
+end

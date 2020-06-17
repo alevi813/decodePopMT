@@ -49,93 +49,94 @@
 
 %direction
 
-newDecodingTesters('direction', {'nancy', 'flat'}, 'nonstimulus', 'nonstimulus');
-newDecodingTesters('direction', {'leo', 'flat'}, 'nonstimulus', 'nonstimulus');
+sessionDecoding('direction', {'nancy', 'flat'}, 'nonstimulus', 'nonstimulus');
+sessionDecoding('direction', {'leo', 'flat'}, 'nonstimulus', 'nonstimulus');
 
-newDecodingTesters('direction', {'nancy', 'late'}, 'nonstimulus', 'nonstimulus');
-newDecodingTesters('direction', {'leo', 'late'}, 'nonstimulus', 'nonstimulus');
+sessionDecoding('direction', {'nancy', 'late'}, 'nonstimulus', 'nonstimulus');
+sessionDecoding('direction', {'leo', 'late'}, 'nonstimulus', 'nonstimulus');
 
-newDecodingTesters('direction', {'nancy', 'early'}, 'nonstimulus', 'nonstimulus');
-newDecodingTesters('direction', {'leo', 'early'}, 'nonstimulus', 'nonstimulus');
-
-% choice
-
-newDecodingTesters('choice', {'nancy', 'flat'}, 'nonstimulus', 'nonstimulus');
-newDecodingTesters('choice', {'leo', 'flat'}, 'nonstimulus', 'nonstimulus');
-
-newDecodingTesters('choice', {'nancy', 'late'}, 'nonstimulus', 'nonstimulus');
-newDecodingTesters('choice', {'leo', 'late'}, 'nonstimulus', 'nonstimulus');
-
-newDecodingTesters('choice', {'nancy', 'early'}, 'nonstimulus', 'nonstimulus');
-newDecodingTesters('choice', {'leo', 'early'}, 'nonstimulus', 'nonstimulus');
-
-%% stim nonstim
-%direction
-
-newDecodingTesters('direction', {'nancy', 'flat'}, 'stimulus', 'nonstimulus');
-newDecodingTesters('direction', {'leo', 'flat'}, 'stimulus', 'nonstimulus');
-
-newDecodingTesters('direction', {'nancy', 'late'}, 'stimulus', 'nonstimulus');
-newDecodingTesters('direction', {'leo', 'late'}, 'stimulus', 'nonstimulus');
-
-newDecodingTesters('direction', {'nancy', 'early'}, 'stimulus', 'nonstimulus');
-newDecodingTesters('direction', {'leo', 'early'}, 'stimulus', 'nonstimulus');
+sessionDecoding('direction', {'nancy', 'early'}, 'nonstimulus', 'nonstimulus');
+sessionDecoding('direction', {'leo', 'early'}, 'nonstimulus', 'nonstimulus');
 
 % choice
 
-newDecodingTesters('choice', {'nancy', 'flat'}, 'stimulus', 'nonstimulus');
-newDecodingTesters('choice', {'leo', 'flat'}, 'stimulus', 'nonstimulus');
+sessionDecoding('choice', {'nancy', 'flat'}, 'nonstimulus', 'nonstimulus');
+sessionDecoding('choice', {'leo', 'flat'}, 'nonstimulus', 'nonstimulus');
 
-newDecodingTesters('choice', {'nancy', 'late'}, 'stimulus', 'nonstimulus');
-newDecodingTesters('choice', {'leo', 'late'}, 'stimulus', 'nonstimulus');
+sessionDecoding('choice', {'nancy', 'late'}, 'nonstimulus', 'nonstimulus');
+sessionDecoding('choice', {'leo', 'late'}, 'nonstimulus', 'nonstimulus');
 
-newDecodingTesters('choice', {'nancy', 'early'}, 'stimulus', 'nonstimulus');
-newDecodingTesters('choice', {'leo', 'early'}, 'stimulus', 'nonstimulus');
+sessionDecoding('choice', {'nancy', 'early'}, 'nonstimulus', 'nonstimulus');
+sessionDecoding('choice', {'leo', 'early'}, 'nonstimulus', 'nonstimulus');
+
 
 %% stim/stim
 
 % direction
 
-newDecodingTesters('direction', {'nancy', 'flat'}, 'stimulus', 'stimulus');
-newDecodingTesters('direction', {'leo', 'flat'}, 'stimulus', 'stimulus');
+sessionDecoding('direction', {'nancy', 'flat'}, 'stimulus', 'stimulus');
+sessionDecoding('direction', {'leo', 'flat'}, 'stimulus', 'stimulus');
 
-newDecodingTesters('direction', {'nancy', 'late'}, 'stimulus', 'stimulus');
-newDecodingTesters('direction', {'leo', 'late'}, 'stimulus', 'stimulus');
+sessionDecoding('direction', {'nancy', 'late'}, 'stimulus', 'stimulus');
+sessionDecoding('direction', {'leo', 'late'}, 'stimulus', 'stimulus');
 
-newDecodingTesters('direction', {'nancy', 'early'}, 'stimulus', 'stimulus');
-newDecodingTesters('direction', {'leo', 'early'}, 'stimulus', 'stimulus');
+sessionDecoding('direction', {'nancy', 'early'}, 'stimulus', 'stimulus');
+sessionDecoding('direction', {'leo', 'early'}, 'stimulus', 'stimulus');
 
 % choice
 
-newDecodingTesters('choice', {'nancy', 'flat'}, 'stimulus', 'stimulus');
-newDecodingTesters('choice', {'leo', 'flat'}, 'stimulus', 'stimulus');
+sessionDecoding('choice', {'nancy', 'flat'}, 'stimulus', 'stimulus');
+sessionDecoding('choice', {'leo', 'flat'}, 'stimulus', 'stimulus');
 
-newDecodingTesters('choice', {'nancy', 'late'}, 'stimulus', 'stimulus');
-newDecodingTesters('choice', {'leo', 'late'}, 'stimulus', 'stimulus');
+sessionDecoding('choice', {'nancy', 'late'}, 'stimulus', 'stimulus');
+sessionDecoding('choice', {'leo', 'late'}, 'stimulus', 'stimulus');
 
-newDecodingTesters('choice', {'nancy', 'early'}, 'stimulus', 'stimulus');
-newDecodingTesters('choice', {'leo', 'early'}, 'stimulus', 'stimulus');
+sessionDecoding('choice', {'nancy', 'early'}, 'stimulus', 'stimulus');
+sessionDecoding('choice', {'leo', 'early'}, 'stimulus', 'stimulus');
+
+%% stim nonstim
+%direction
+
+sessionDecoding('direction', {'nancy', 'flat'}, 'stimulus', 'nonstimulus');
+sessionDecoding('direction', {'leo', 'flat'}, 'stimulus', 'nonstimulus');
+
+sessionDecoding('direction', {'nancy', 'late'}, 'stimulus', 'nonstimulus');
+sessionDecoding('direction', {'leo', 'late'}, 'stimulus', 'nonstimulus');
+
+sessionDecoding('direction', {'nancy', 'early'}, 'stimulus', 'nonstimulus');
+sessionDecoding('direction', {'leo', 'early'}, 'stimulus', 'nonstimulus');
+
+% choice
+
+sessionDecoding('choice', {'nancy', 'flat'}, 'stimulus', 'nonstimulus');
+sessionDecoding('choice', {'leo', 'flat'}, 'stimulus', 'nonstimulus');
+
+sessionDecoding('choice', {'nancy', 'late'}, 'stimulus', 'nonstimulus');
+sessionDecoding('choice', {'leo', 'late'}, 'stimulus', 'nonstimulus');
+
+sessionDecoding('choice', {'nancy', 'early'}, 'stimulus', 'nonstimulus');
+sessionDecoding('choice', {'leo', 'early'}, 'stimulus', 'nonstimulus');
 
 %% nonstim/stim
 
 % direction
 
-newDecodingTesters('direction', {'nancy', 'flat'}, 'nonstimulus', 'stimulus');
-newDecodingTesters('direction', {'leo', 'flat'}, 'nonstimulus', 'stimulus');
+sessionDecoding('direction', {'nancy', 'flat'}, 'nonstimulus', 'stimulus');
+sessionDecoding('direction', {'leo', 'flat'}, 'nonstimulus', 'stimulus');
 
-newDecodingTesters('direction', {'nancy', 'late'}, 'nonstimulus', 'stimulus');
-newDecodingTesters('direction', {'leo', 'late'}, 'nonstimulus', 'stimulus');
+sessionDecoding('direction', {'nancy', 'late'}, 'nonstimulus', 'stimulus');
+sessionDecoding('direction', {'leo', 'late'}, 'nonstimulus', 'stimulus');
 
-newDecodingTesters('direction', {'nancy', 'early'}, 'nonstimulus', 'stimulus');
-newDecodingTesters('direction', {'leo', 'early'}, 'nonstimulus', 'stimulus');
+sessionDecoding('direction', {'nancy', 'early'}, 'nonstimulus', 'stimulus');
+sessionDecoding('direction', {'leo', 'early'}, 'nonstimulus', 'stimulus');
 
 % choice
 
-newDecodingTesters('choice', {'nancy', 'flat'}, 'nonstimulus', 'stimulus');
-newDecodingTesters('choice', {'leo', 'flat'}, 'nonstimulus', 'stimulus');
+sessionDecoding('choice', {'nancy', 'flat'}, 'nonstimulus', 'stimulus');
+sessionDecoding('choice', {'leo', 'flat'}, 'nonstimulus', 'stimulus');
 
-newDecodingTesters('choice', {'nancy', 'late'}, 'nonstimulus', 'stimulus');
-newDecodingTesters('choice', {'leo', 'late'}, 'nonstimulus', 'stimulus');
+sessionDecoding('choice', {'nancy', 'late'}, 'nonstimulus', 'stimulus');
+sessionDecoding('choice', {'leo', 'late'}, 'nonstimulus', 'stimulus');
 
-newDecodingTesters('choice', {'nancy', 'early'}, 'nonstimulus', 'stimulus');
-newDecodingTesters('choice', {'leo', 'early'}, 'nonstimulus', 'stimulus');
+sessionDecoding('choice', {'nancy', 'early'}, 'nonstimulus', 'stimulus');
+sessionDecoding('choice', {'leo', 'early'}, 'nonstimulus', 'stimulus');

@@ -32,17 +32,17 @@ else
     dataPath  = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/Data/' condition{1}];
     nDataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/Data/' condition{1} '/neurons'];
     
-%     if strcmp(model, 'choice')
-%         savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/no_xval/choice/' fitWindow 'Fit_' plotWindow 'Plot'];
-%     else
-%         savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/no_xval/direction/' fitWindow 'Fit_' plotWindow 'Plot'];
-%     end
-    
     if strcmp(model, 'choice')
-        savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/choice/' fitWindow 'Fit_' plotWindow 'Plot'];
+        savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/no_xval/choice/' fitWindow 'Fit_' plotWindow 'Plot'];
     else
-        savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/direction/' fitWindow 'Fit_' plotWindow 'Plot'];
+        savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/no_xval/direction/' fitWindow 'Fit_' plotWindow 'Plot'];
     end
+    
+%     if strcmp(model, 'choice')
+%         savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/choice/lowSpikeRemoval/' fitWindow 'Fit_' plotWindow 'Plot'];
+%     else
+%         savePath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/direction/lowSpikeRemoval/' fitWindow 'Fit_' plotWindow 'Plot'];
+%     end
 end
 
 nFiles = dir(nDataPath); %nFiles = nFiles(4:end);
@@ -235,7 +235,7 @@ for kEx = 1:numel(experiments)
             R = squeeze(froSpikes(iTrial,:,:) ); %squeeze to get spikes per bin per neuron during a specific trial
             %dvAll(iTrial,:)   = R*wAll; % muliply spike matrix (nBin x nNeuron) by weight vector (nNeurons x 1)
             %dvAll(iTrial,:)   = R* sLoo(iTrial).wTrain; % muliply spike matrix (nBin x nNeuron) by weight vector (nNeurons x 1)
-            dvAll(iTrial, :)   = R* loo_avgW;
+            dvAll(iTrial, :)
             
             if flipDV
                 dvAll(iTrial,:)   = -dvAll(iTrial,:);

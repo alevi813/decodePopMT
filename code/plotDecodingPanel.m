@@ -59,7 +59,7 @@ dS.early.cho.cpse = smooth( (std(dS.early.cho.cpt) / sqrt(size(dS.early.cho.cpt,
 boundedline(session.bins, dS.early.cho.cpm, dS.early.cho.cpse, 'cmap', [.3 0 0], 'alpha');
 %boundedline(session.bins_fromGo, dS.early.cho.cpm, dS.early.cho.cpse, 'cmap', [.3 0 0], 'alpha');
 
-%xlim([-.5 1.5])
+xlim([-.5 1.5])
 %ylim([0.46 .64])
 axis square
 
@@ -75,7 +75,7 @@ dS.flat.cho.cpse = smooth( (std(dS.flat.cho.cpt) / sqrt(size(dS.flat.cho.cpt, 1)
 boundedline(session.bins, dS.flat.cho.cpm, dS.flat.cho.cpse, 'cmap', [0 0 .3], 'alpha');
 %boundedline(session.bins_fromGo, dS.flat.cho.cpm, dS.flat.cho.cpse, 'cmap', [0 0 .3], 'alpha');
 % 
-%xlim([-.5 1.5])
+xlim([-.5 1.5])
 %ylim([0.46 .64])
 axis square
 
@@ -91,7 +91,7 @@ dS.late.cho.cpse = smooth( (std(dS.late.cho.cpt) / sqrt(size(dS.late.cho.cpt, 1)
 boundedline(session.bins, dS.late.cho.cpm, dS.late.cho.cpse, 'cmap', [.4 .4 0], 'alpha');
 %boundedline(session.bins_fromGo, dS.late.cho.cpm, dS.late.cho.cpse, 'cmap', [.4 .4 0], 'alpha');
 % 
-%xlim([-.5 1.5])
+xlim([-.5 1.5])
 %ylim([0.46 .64])
 axis square
 

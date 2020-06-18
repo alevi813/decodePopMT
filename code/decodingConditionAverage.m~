@@ -34,7 +34,9 @@ else
     %     figPath   = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/' model filesep 'test_xval/' condition];
     
     
-    dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
+    %dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/no_xval/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
+    dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/xvalMean/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
+    %dataPath = ['/Users/aaronlevi/Dropbox/twagAnalysis4.1/decoding/sessionData/' model filesep fitWindow 'Fit_' plotWindow 'Plot'];
 end
 
 
@@ -54,8 +56,7 @@ combo.sumcoh  = [];
 combo.targRchosen = [];
 combo.nNeurons = [];
 combo.w = [];
-combo.looMean = [];
-combo.looMedian = [];
+combo.slooW = [];
 combo.timeToGo = [];
 
 for iExp = 1:length(experiments)
@@ -92,7 +93,7 @@ for iExp = 1:length(experiments)
         combo.nNeurons = [combo.nNeurons; session.nNeurons];
         combo.w        = [combo.w; session.wAll];
         combo.looMean    = [combo.looMean; looMean];
-        combo.looMedian    = [combo.looMedian; looMedian];
+        combo.looMean    = [combo.looMean; looMedian];
     end
     
     clear session

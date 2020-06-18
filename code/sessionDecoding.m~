@@ -255,17 +255,13 @@ for kEx = 1:numel(experiments)
     binaryCho   = Cho==1;
     [cp_m,cp_s] = choiceProbabilityCalculate(dvAll(froIx, :), binaryCho(froIx));
     
-    % get pulse info/times and calculate pta using the dv
-    % only necessary for plotWindow==stimulus
-    if strcmp(plotWindow, 'stimulus')
-        pulses     = sum(stim.pulses(goodTrials,:,:),3);
-        pulseTimes = find(pdsa.binSpTimes(stim.timing(find(stim.goodtrial,1)).pulses - stim.timing(find(stim.goodtrial,1)).motionon, 0, window, binSize));
-        
-        nTimeLags = 50;
-        pta = pulseSTA(pulses, dvAll, pulseTimes, nTimeLags);
-        ptaBins = bsxfun(@plus, (1:nTimeLags)', pulseTimes) * binSize;
-    end
-    
+    % get pulse incalculate pta using the dv
+    pulses     = sum(stim.pulses(goodTrials,:,:),3);
+    pulseTimes = find(pdsa.binSpTimes(stim.timing(find(stim.goodtrial,1)).pulses - stim.timing(find(stim.goodtrial,1)).motionon, 0, window, binSize));
+
+    nTimeLags = 50;
+    pta = pulseSTA(pulses, dvAll, pulseTimes, nTimeLags);
+    ptaBins = bsxfun(@plus, (1:nTimeLags)', pulseTimes) * binSize;
     %% package and save
     
     sessionStruct.dvAll     = dvAll;
@@ -280,6 +276,8 @@ for kEx = 1:numel(experiments)
     
     sessionStruct.spikes    = spikes;
     sessionStruct.newdvAll  = [dvAll(binaryCho==1,:); (dvAll(binaryCho==0,:) .*-1)];
+    sessionStruct.ptaBins   = ptaBins;
+    sessionStruct.pta       = pta;
     sessionStruct.cho       = binaryCho;
     sessionStruct.direction = Direc;
     sessionStruct.froIx     = froIx;
@@ -293,14 +291,6 @@ for kEx = 1:numel(experiments)
     sessionStruct.nNeurons  = nNeurons;
     sessionStruct.fitWindow = fitWindow;
     sessionStruct.plotWindow = plotWindow;
-    
-    if strcmp(plotWindow, 'stimulus')
-        sessionStruct.ptaBins   = ptaBins;
-        sessionStruct.pta       = pta;
-    else
-        sessionStruct.ptaBins   = [];
-        sessionStruct.pta       = [];
-    end
     
     % save the session data strcut
     save([savePath filesep exname], '-v7.3', '-struct', 'sessionStruct')
